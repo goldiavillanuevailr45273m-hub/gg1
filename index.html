@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Expulsion Auto Loader</title>
+</head>
+<body style="background-color:black; color:white; font-family:sans-serif; text-align:center;">
+  <h1>Loading Expulsion v4.0...</h1>
+  <script>
+    fetch('ExpulsionV4.0-1.38.bin')
+      .then(r => r.arrayBuffer())
+      .then(payload => {
+        const socket = new WebSocket('ws://' + location.hostname + ':9020');
+        socket.binaryType = 'arraybuffer';
+        socket.onopen = () => {
+          socket.send(payload);
+          document.body.innerHTML += "<h2 style='color:lime;'>Expulsion sent successfully!</h2>";
+        };
+        socket.onerror = () => {
+          document.body.innerHTML += "<h2 style='color:red;'>Error sending payload!</h2>";
+        };
+      })
+      .catch(() => {
+        document.body.innerHTML += "<h2 style='color:red;'>BIN file not found!</h2>";
+      });
+  </script>
+</body>
+</html>
